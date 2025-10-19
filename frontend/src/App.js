@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App" style={{padding: '20px'}}>
       <h1>Frontend - User Manager</h1>
-      <AddUser onAdded={() => { if (listRef.current && listRef.current.fetchUsers) listRef.current.fetchUsers(); window.location.reload(); }} />
+      <AddUser onAdded={() => { if (listRef.current && listRef.current.fetchUsers) listRef.current.fetchUsers(); }} />
       <hr />
       <UserList ref={listRef} />
     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 export default function AddUser({ onAdded }) {
   const [name, setName] = useState('');
@@ -12,8 +12,8 @@ export default function AddUser({ onAdded }) {
     setLoading(true);
     setError(null);
     try {
-      const newUser = { name, email };
-      await axios.post('http://localhost:3000/users', newUser);
+  const newUser = { name, email };
+  await api.post('/users', newUser);
       setName('');
       setEmail('');
       if (onAdded) onAdded();
