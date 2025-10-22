@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import './App.css';
 import React, { useRef } from 'react';
 import UserList from './components/UserList';
@@ -17,3 +18,20 @@ function App() {
 }
 
 export default App;
+=======
+import AddUser from "./components/AddUser";
+import UserList from "./components/UserList";
+import "./styles.css";
+
+export default function App() {   // <-- export default BẮT BUỘC phải có
+  const handleAdded = () => window.location.reload();
+
+  return (
+    <div className="app">
+      <h1>Group Project – Frontend</h1>
+      <AddUser onAdded={handleAdded} />
+      <UserList />
+    </div>
+  );
+}
+>>>>>>> feature/frontend-mongodb
