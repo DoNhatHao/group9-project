@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import AddUser from "./components/AddUser";
+import UserList from "./components/UserList";
+import "./styles.css";
 
-function App() {
+export default function App() {
+  // Cách đơn giản: không cần ref; UserList tự fetch sau khi mount,
+  // còn AddUser gọi onAdded -> ta reload trang (nhanh-gọn), hoặc nâng cao thì dùng state nâng lên App.
+  const handleAdded = () => {
+    // Cách nhanh: reload nhẹ để danh sách refresh
+    // (hoặc bạn có thể truyền state từ App xuống cả 2 component để không cần reload)
+    window.location.reload();
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1>Group Project – Frontend</h1>
+      <AddUser onAdded={handleAdded} />
+      <UserList />
     </div>
   );
 }
-
-export default App;

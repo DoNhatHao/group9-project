@@ -1,0 +1,9 @@
+:root { font-family: system-ui, Arial, sans-serif; }
+.app { padding: 24px; max-width: 800px; margin: 0 auto; }
+h1 { margin: 0 0 16px; }
+.panel { display: grid; gap: 8px; max-width: 360px; margin: 0 0 16px; }
+.panel input, .panel button { padding: 8px 12px; }
+.list { display: grid; gap: 6px; }
+.item { display: flex; align-items: center; gap: 8px; }
+.item button { padding: 4px 10px; }
+.edit-form { display: grid; gap: 8px; max-width: 360px; margin: 12px 0; }
