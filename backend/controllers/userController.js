@@ -1,65 +1,84 @@
-// Temporary users array for testing
-let users = [];
+const User = require('../models/User');
 
 // Get all users
-const getUsers = (req, res) => {
-  res.json(users);
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users', error: error.message });
+  }
 };
 
 // Create a new user
-const createUser = (req, res) => {
-  const { name, email } = req.body;
-  
-  if (!name || !email) {
-    return res.status(400).json({ message: 'Name and email are required' });
+const createUser = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    
+    if (!name || !email) {
+      return res.status(400).json({ message: 'Name and email are required' });
+    }
+
+    const newUser = new User({ name, email });
+    await newUser.save();
+    
+    res.status(201).json(newUser);
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+    res.status(500).json({ message: 'Error creating user', error: error.message });
   }
-
-  const newUser = {
-    id: users.length + 1,
-    name,
-    email
-  };
-
-  users.push(newUser);
-  res.status(201).json(newUser);
 };
 
 // Update a user
-const updateUser = (req, res) => {
-  const { id } = req.params;
-  const { name, email } = req.body;
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email } = req.body;
 
-  const index = users.findIndex(u => u.id == id);
-  
-  if (index === -1) {
-    return res.status(404).json({ message: "User not found" });
+    if (!name && !email) {
+      return res.status(400).json({ message: "Name or email is required for update" });
+    }
+
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+    res.status(500).json({ message: 'Error updating user', error: error.message });
   }
-
-  if (!name && !email) {
-    return res.status(400).json({ message: "Name or email is required for update" });
-  }
-
-  users[index] = { 
-    ...users[index], 
-    ...(name && { name }), 
-    ...(email && { email }) 
-  };
-
-  res.json(users[index]);
 };
 
 // Delete a user
-const deleteUser = (req, res) => {
-  const { id } = req.params;
-  const initialLength = users.length;
-  
-  users = users.filter(u => u.id != id);
-  
-  if (users.length === initialLength) {
-    return res.status(404).json({ message: "User not found" });
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const deletedUser = await User.findByIdAndDelete(id);
+    
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    res.json({ message: "User deleted successfully", user: deletedUser });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting user', error: error.message });
   }
-  
-  res.json({ message: "User deleted successfully" });
 };
 
 module.exports = {
