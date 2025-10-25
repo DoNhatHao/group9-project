@@ -5,8 +5,8 @@ const User = require('./models/User');
 const app = express();
 app.use(express.json());
 
-// Thay thế YOUR_CONNECTION_STRING bằng connection string từ MongoDB Atlas của bạn
-const mongoURI = 'YOUR_CONNECTION_STRING';
+// MongoDB Atlas connection string
+const mongoURI = 'mongodb+srv://user123:<db_password>@cluster09.fsauk2d.mongodb.net/?appName=Cluster09';
 
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
