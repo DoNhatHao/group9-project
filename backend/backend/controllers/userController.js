@@ -1,7 +1,7 @@
 const User = require('../models/User');
 
-// Get all users
-const getUsers = async (req, res) => {
+// GET: lấy tất cả users
+exports.getUsers = async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -10,8 +10,8 @@ const getUsers = async (req, res) => {
   }
 };
 
-// Create a new user
-const createUser = async (req, res) => {
+// POST: tạo user mới
+exports.createUser = async (req, res) => {
   try {
     const { name, email } = req.body;
     
@@ -31,8 +31,8 @@ const createUser = async (req, res) => {
   }
 };
 
-// Update a user
-const updateUser = async (req, res) => {
+// PUT: sửa user
+exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email } = req.body;
@@ -64,8 +64,8 @@ const updateUser = async (req, res) => {
   }
 };
 
-// Delete a user
-const deleteUser = async (req, res) => {
+// DELETE: xóa user
+exports.deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -79,11 +79,4 @@ const deleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error deleting user', error: error.message });
   }
-};
-
-module.exports = {
-  getUsers,
-  createUser,
-  updateUser,
-  deleteUser
 };
