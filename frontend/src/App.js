@@ -1,19 +1,21 @@
-import './App.css';
-import React, { useRef } from 'react';
-import UserList from './components/UserList';
-import AddUser from './components/AddUser';
+import AddUser from "./AddUser";
+import UserList from "./UserList";
+import "./styles.css";
 
-function App() {
-  const listRef = useRef();
+export default function App() {
+  // Cách đơn giản: không cần ref; UserList tự fetch sau khi mount,
+  // còn AddUser gọi onAdded -> ta reload trang (nhanh-gọn), hoặc nâng cao thì dùng state nâng lên App.
+  const handleAdded = () => {
+    // Cách nhanh: reload nhẹ để danh sách refresh
+    // (hoặc bạn có thể truyền state từ App xuống cả 2 component để không cần reload)
+    window.location.reload();
+  };
 
   return (
-    <div className="App" style={{padding: '20px'}}>
-      <h1>Frontend - User Manager</h1>
-      <AddUser onAdded={() => { if (listRef.current && listRef.current.fetchUsers) listRef.current.fetchUsers(); window.location.reload(); }} />
-      <hr />
-      <UserList ref={listRef} />
+    <div className="app">
+      <h1>Group Project – Frontend</h1>
+      <AddUser onAdded={handleAdded} />
+      <UserList />
     </div>
   );
 }
-
-export default App;

@@ -1,0 +1,179 @@
+:root { 
+  font-family: system-ui, Arial, sans-serif; 
+}
+
+body {
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+.app { 
+  padding: 24px; 
+  max-width: 900px; 
+  margin: 0 auto; 
+  background-color: white;
+  min-height: 100vh;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 { 
+  margin: 0 0 24px; 
+  color: #333;
+  text-align: center;
+}
+
+h2 {
+  color: #555;
+  border-bottom: 2px solid #4CAF50;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.panel { 
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.panel input, .panel button { 
+  padding: 10px 14px; 
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.panel input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.panel input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.panel button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.panel button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  transition: box-shadow 0.2s;
+}
+
+.user-item:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-info strong {
+  color: #333;
+  font-size: 16px;
+}
+
+.user-info small {
+  color: #666;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit, .btn-delete, .btn-save, .btn-cancel {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-edit {
+  background-color: #2196F3;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #0b7dda;
+}
+
+.btn-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #da190b;
+}
+
+.btn-save {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: #45a049;
+}
+
+.btn-cancel {
+  background-color: #757575;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #616161;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.edit-form input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.edit-form .button-group {
+  justify-content: flex-end;
+}
+
+.error {
+  color: #f44336;
+  background-color: #ffebee;
+  padding: 12px;
+  border-left: 4px solid #f44336;
+}
