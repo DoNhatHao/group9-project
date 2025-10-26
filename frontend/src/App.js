@@ -1,5 +1,5 @@
-import AddUser from "./components/AddUser";
-import UserList from "./components/UserList";
+import AddUser from "./AddUser";
+import UserList from "./UserList";
 import "./styles.css";
 
 export default function App() {
