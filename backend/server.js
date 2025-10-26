@@ -43,8 +43,7 @@ mongoose
 
 // --- Routes ---
 const userRoutes = require('./routes/user'); // đảm bảo đúng file router
-app.use('/users', userRoutes);
-
+app.use('/users', userRoutes)
 // --- Health / root ---
 app.get('/', (_req, res) => res.json({ message: 'Welcome to the API' }));
 
@@ -59,6 +58,6 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ message: 'Server error' });
 });
 
-const PORT = process.env.PORT || 3000; // <= 3001
+const PORT = process.env.PORT || 3001; // <= 3001
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
 
