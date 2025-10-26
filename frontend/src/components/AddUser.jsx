@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { api } from "../api";
+import { api } from "../api"; // Đúng với vị trí file api.js của bạn
 
 export default function AddUser({ onAdded }) {
   const [name, setName] = useState("");
@@ -22,3 +22,6 @@ export default function AddUser({ onAdded }) {
     </form>
   );
 }
+   
+
+
