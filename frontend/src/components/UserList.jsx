@@ -5,6 +5,9 @@ import { showError, showSuccess, showConfirm } from './utils/toast';
 const UserList = ({ onEditUser, onUserCountChange }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editingUser, setEditingUser] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -44,9 +47,45 @@ const UserList = ({ onEditUser, onUserCountChange }) => {
     }
   };
 
+  // Xử lý sự kiện Sửa - Hiển thị form với dữ liệu người dùng đã chọn
   const handleEdit = (user) => {
-    if (onEditUser) {
-      onEditUser(user);
+    setEditingUser(user._id);
+    setEditName(user.name);
+    setEditEmail(user.email);
+  };
+
+  const cancelEdit = () => {
+    setEditingUser(null);
+    setEditName("");
+    setEditEmail("");
+  };
+
+  // Gửi PUT request đến backend để cập nhật
+  const saveEdit = async (id) => {
+    // Validation
+    if (!editName.trim()) {
+      showError("Tên không được để trống");
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(editEmail)) {
+      showError("Email không hợp lệ");
+      return;
+    }
+
+    try {
+      const res = await api.put(`/users/${id}`, {
+        name: editName,
+        email: editEmail
+      });
+      setUsers(users.map(u => u._id === id ? res.data : u));
+      cancelEdit();
+      showSuccess("Cập nhật user thành công!");
+      if (onUserCountChange) {
+        onUserCountChange(users.length);
+      }
+    } catch (err) {
+      console.error('Lỗi khi cập nhật người dùng', err);
+      showError("Không thể cập nhật người dùng");
     }
   };
 
@@ -71,12 +110,41 @@ const UserList = ({ onEditUser, onUserCountChange }) => {
           <tbody>
             {users.map((user) => (
               <tr key={user._id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  <button onClick={() => handleEdit(user)}>Sửa</button>
-                  <button onClick={() => handleDelete(user._id, user.name)}>Xóa</button>
-                </td>
+                {editingUser === user._id ? (
+                  // Form sửa inline
+                  <>
+                    <td>
+                      <input 
+                        type="text" 
+                        value={editName} 
+                        onChange={(e) => setEditName(e.target.value)}
+                        placeholder="Tên"
+                      />
+                    </td>
+                    <td>
+                      <input 
+                        type="email" 
+                        value={editEmail} 
+                        onChange={(e) => setEditEmail(e.target.value)}
+                        placeholder="Email"
+                      />
+                    </td>
+                    <td>
+                      <button onClick={() => saveEdit(user._id)}>Lưu</button>
+                      <button onClick={cancelEdit}>Hủy</button>
+                    </td>
+                  </>
+                ) : (
+                  // Hiển thị thông tin user
+                  <>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>
+                      <button onClick={() => handleEdit(user)}>Sửa</button>
+                      <button onClick={() => handleDelete(user._id, user.name)}>Xóa</button>
+                    </td>
+                  </>
+                )}
               </tr>
             ))}
           </tbody>
