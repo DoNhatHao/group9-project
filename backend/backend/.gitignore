@@ -1,0 +1,50 @@
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Process IDs / runtime files
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage & test output
+coverage/
+.nyc_output/
+junit.xml
+
+# Builds / compiled output
+dist/
+build/
+
+# Caches & tmp
+.cache/
+.eslintcache
+tmp/
+.tsbuildinfo
+
+# Uploads (nếu dùng multer)
+uploads/
+!uploads/.gitkeep
+
+# OS/Editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Docker & misc (tuỳ dự án)
+.docker/
+.env.docker
