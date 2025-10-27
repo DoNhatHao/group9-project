@@ -11,7 +11,7 @@ const generateToken = (userId) => {
   );
 };
 
-// @desc    Đăng ký user mới
+// @desc    Đăng ký user
 // @route   POST /api/auth/signup
 // @access  Public
 exports.signup = async (req, res) => {
