@@ -1,19 +1,63 @@
-import AddUser from "./AddUser";
-import UserList from "./UserList";
-import "./styles.css";
+import React, { useState, useEffect } from 'react';
+import SignUp from './components/SignUp';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import './App.css';
 
 export default function App() {
-  // Backend team: Đã hoàn thành API CRUD đầy đủ
-  // Kết nối: http://localhost:3001/users
-  const handleAdded = () => {
-    window.location.reload();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [showSignUp, setShowSignUp] = useState(false);
+
+  // Check if user is already logged in on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    
+    if (token && user) {
+      setIsAuthenticated(true);
+      setCurrentUser(JSON.parse(user));
+    }
+  }, []);
+
+  const handleSignUpSuccess = (user) => {
+    setIsAuthenticated(true);
+    setCurrentUser(user);
   };
 
+  const handleLoginSuccess = (user) => {
+    setIsAuthenticated(true);
+    setCurrentUser(user);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+  };
+
+  const toggleForm = () => {
+    setShowSignUp(!showSignUp);
+  };
+
+  // If authenticated, show Dashboard
+  if (isAuthenticated && currentUser) {
+    return <Dashboard user={currentUser} onLogout={handleLogout} />;
+  }
+
+  // If not authenticated, show Login or SignUp
   return (
-    <div className="app">
-      <h1>Group 9 Project – User Management</h1>
-      <AddUser onAdded={handleAdded} />
-      <UserList />
+    <div className="App">
+      {showSignUp ? (
+        <SignUp 
+          onToggleForm={toggleForm} 
+          onSignUpSuccess={handleSignUpSuccess}
+        />
+      ) : (
+        <Login 
+          onToggleForm={toggleForm} 
+          onLoginSuccess={handleLoginSuccess}
+        />
+      )}
     </div>
   );
 }
