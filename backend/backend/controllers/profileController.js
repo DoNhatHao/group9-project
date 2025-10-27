@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 // @access  Private (cần token)
 exports.getProfile = async (req, res) => {
   try {
-    // req.user đã được set bởi authenticate middleware
+    // req.user đã được set bởi authenticate
     const user = await User.findById(req.user._id);
     
     if (!user) {
