@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:3001", // Backend đang chạy ở port 3001
+  baseURL: "http://localhost:30000", // Backend đang chạy ở port 30000
 });
 
 // Thêm token vào header cho các request cần authentication
@@ -30,11 +30,32 @@ export const authAPI = {
   logout: () => api.post('/api/auth/logout'),
 };
 
-// User API functions (sẽ dùng sau)
+// Profile API functions
+export const profileAPI = {
+  // Lấy thông tin profile
+  getProfile: () => api.get('/api/profile'),
+  
+  // Cập nhật profile
+  updateProfile: (profileData) => api.put('/api/profile', profileData),
+  
+  // Xóa tài khoản
+  deleteAccount: (password) => api.delete('/api/profile', { data: { password } }),
+};
+
+// User API functions (Admin only)
 export const userAPI = {
-  getUsers: () => api.get('/users'),
-  getUser: (id) => api.get(`/users/${id}`),
-  createUser: (userData) => api.post('/users', userData),
-  updateUser: (id, userData) => api.put(`/users/${id}`, userData),
-  deleteUser: (id) => api.delete(`/users/${id}`),
+  // Lấy danh sách tất cả users
+  getUsers: () => api.get('/api/users'),
+  
+  // Lấy 1 user theo ID
+  getUser: (id) => api.get(`/api/users/${id}`),
+  
+  // Tạo user mới
+  createUser: (userData) => api.post('/api/users', userData),
+  
+  // Cập nhật user
+  updateUser: (id, userData) => api.put(`/api/users/${id}`, userData),
+  
+  // Xóa user
+  deleteUser: (id) => api.delete(`/api/users/${id}`),
 };

@@ -2,14 +2,24 @@ import React from 'react';
 import { authAPI } from '../api';
 import './Dashboard.css';
 
-const Dashboard = ({ user, onLogout }) => {
+const Dashboard = ({ user, onLogout, onNavigateToProfile, onNavigateToAdmin }) => {
   const handleLogout = async () => {
+    // Hiển thị thông báo xác nhận đăng xuất
+    const confirmLogout = window.confirm('Are you sure you want to logout?');
+    
+    if (!confirmLogout) {
+      return; // Hủy đăng xuất nếu user không confirm
+    }
+
     try {
       await authAPI.logout();
       
       // Xóa token và user info
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      
+      // Hiển thị thông báo thành công
+      alert('Logout successful! See you again.');
       
       // Callback để quay về trang login
       if (onLogout) {
@@ -20,6 +30,9 @@ const Dashboard = ({ user, onLogout }) => {
       // Vẫn xóa token và logout ngay cả khi có lỗi
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      
+      alert('Logged out successfully.');
+      
       if (onLogout) {
         onLogout();
       }
@@ -73,19 +86,19 @@ const Dashboard = ({ user, onLogout }) => {
         <div className="features-section">
           <h3>Available Features</h3>
           <div className="features-grid">
-            <div className="feature-card">
+            <div className="feature-card" onClick={onNavigateToProfile} style={{cursor: 'pointer'}}>
               <div className="feature-icon">👤</div>
               <h4>Profile Management</h4>
               <p>Update your personal information and avatar</p>
-              <span className="coming-soon">Coming Soon</span>
+              <button className="btn-feature">Go to Profile</button>
             </div>
             
             {user?.role === 'admin' && (
-              <div className="feature-card">
+              <div className="feature-card" onClick={onNavigateToAdmin} style={{cursor: 'pointer'}}>
                 <div className="feature-icon">👥</div>
                 <h4>User Management</h4>
                 <p>View and manage all users (Admin only)</p>
-                <span className="coming-soon">Coming Soon</span>
+                <button className="btn-feature">Go to Admin Panel</button>
               </div>
             )}
             

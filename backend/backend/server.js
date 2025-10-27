@@ -28,7 +28,12 @@ mongoose.connect(mongoURI)
 
 // Routes
 const userRoutes = require('./routes/user');
-app.use('/users', userRoutes);
+const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profile');
+
+app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Default route
 app.get('/', (req, res) => {
