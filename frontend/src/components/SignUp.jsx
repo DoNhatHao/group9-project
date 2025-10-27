@@ -30,17 +30,17 @@ const SignUp = ({ onToggleForm, onSignUpSuccess }) => {
 
     // Validation
     if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      setError('Please fill in all fields');
+      setError('Vui lòng điền đầy đủ thông tin');
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError('Mật khẩu không khớp');
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError('Mật khẩu phải có ít nhất 6 ký tự');
       return;
     }
 
@@ -54,7 +54,7 @@ const SignUp = ({ onToggleForm, onSignUpSuccess }) => {
       });
 
       if (response.data.success) {
-        setSuccess(response.data.message || 'Sign up successful!');
+        setSuccess(response.data.message || 'Đăng ký thành công!');
         
         // Lưu token và user info
         localStorage.setItem('token', response.data.data.token);
@@ -79,7 +79,7 @@ const SignUp = ({ onToggleForm, onSignUpSuccess }) => {
       console.error('Signup error:', err);
       setError(
         err.response?.data?.message || 
-        'An error occurred during sign up. Please try again.'
+        'Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.'
       );
     } finally {
       setLoading(false);
@@ -89,22 +89,22 @@ const SignUp = ({ onToggleForm, onSignUpSuccess }) => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2 className="auth-title">Sign Up</h2>
-        <p className="auth-subtitle">Create your account</p>
+        <h2 className="auth-title">Đăng Ký</h2>
+        <p className="auth-subtitle">Tạo tài khoản mới</p>
 
         <form onSubmit={handleSubmit} className="auth-form">
           {error && <div className="alert alert-error">{error}</div>}
           {success && <div className="alert alert-success">{success}</div>}
 
           <div className="form-group">
-            <label htmlFor="name">Full Name</label>
+            <label htmlFor="name">Họ và Tên</label>
             <input
               type="text"
               id="name"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter your full name"
+              placeholder="Nhập họ và tên"
               disabled={loading}
             />
           </div>
@@ -117,33 +117,33 @@ const SignUp = ({ onToggleForm, onSignUpSuccess }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email"
+              placeholder="Nhập email"
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Mật khẩu</label>
             <input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter your password (min 6 characters)"
+              placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)"
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+            <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
             <input
               type="password"
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              placeholder="Confirm your password"
+              placeholder="Nhập lại mật khẩu"
               disabled={loading}
             />
           </div>
@@ -153,18 +153,18 @@ const SignUp = ({ onToggleForm, onSignUpSuccess }) => {
             className="btn btn-primary" 
             disabled={loading}
           >
-            {loading ? 'Signing up...' : 'Sign Up'}
+            {loading ? 'Đang đăng ký...' : 'Đăng Ký'}
           </button>
         </form>
 
         <p className="auth-switch">
-          Already have an account?{' '}
+          Đã có tài khoản?{' '}
           <button 
             onClick={onToggleForm} 
             className="link-button"
             disabled={loading}
           >
-            Login here
+            Đăng nhập tại đây
           </button>
         </p>
       </div>

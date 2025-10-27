@@ -5,6 +5,7 @@ import './Profile.css';
 const Profile = ({ user, onProfileUpdate, onLogout }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
@@ -35,6 +36,54 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
     }
   }, [user]);
 
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Vui lòng chọn file ảnh');
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Kích thước file phải nhỏ hơn 5MB');
+      return;
+    }
+
+    setUploadingAvatar(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('avatar', file);
+
+      const response = await profileAPI.uploadAvatar(formDataToSend);
+
+      if (response.data.success) {
+        setSuccess('Tải ảnh đại diện lên thành công!');
+        setFormData(prev => ({ ...prev, avatar: response.data.data.avatar }));
+        
+        // Update user in parent component
+        if (onProfileUpdate) {
+          onProfileUpdate(response.data.data.user);
+        }
+
+        setTimeout(() => setSuccess(''), 3000);
+      }
+    } catch (err) {
+      console.error('Upload avatar error:', err);
+      setError(
+        err.response?.data?.message || 
+        'Lỗi khi tải ảnh lên. Vui lòng thử lại.'
+      );
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -51,26 +100,26 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
 
     // Validation
     if (!formData.name || !formData.email) {
-      setError('Name and email are required');
+      setError('Tên và email là bắt buộc');
       return;
     }
 
     // Validate password change nếu có
     if (showChangePassword) {
       if (!formData.currentPassword) {
-        setError('Current password is required to change password');
+        setError('Mật khẩu hiện tại là bắt buộc để đổi mật khẩu');
         return;
       }
       if (!formData.newPassword) {
-        setError('New password is required');
+        setError('Mật khẩu mới là bắt buộc');
         return;
       }
       if (formData.newPassword.length < 6) {
-        setError('New password must be at least 6 characters');
+        setError('Mật khẩu mới phải có ít nhất 6 ký tự');
         return;
       }
       if (formData.newPassword !== formData.confirmNewPassword) {
-        setError('New passwords do not match');
+        setError('Mật khẩu mới không khớp');
         return;
       }
     }
@@ -93,7 +142,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
       const response = await profileAPI.updateProfile(updateData);
 
       if (response.data.success) {
-        setSuccess(response.data.message || 'Profile updated successfully!');
+        setSuccess(response.data.message || 'Cập nhật hồ sơ thành công!');
         
         // Cập nhật user info trong localStorage
         const updatedUser = response.data.data;
@@ -118,7 +167,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
       console.error('Update profile error:', err);
       setError(
         err.response?.data?.message || 
-        'An error occurred while updating profile'
+        'Đã xảy ra lỗi khi cập nhật hồ sơ'
       );
     } finally {
       setLoading(false);
@@ -127,11 +176,11 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
 
   const handleDeleteAccount = async () => {
     if (!deletePassword) {
-      setError('Password is required to delete account');
+      setError('Mật khẩu là bắt buộc để xóa tài khoản');
       return;
     }
 
-    if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa tài khoản? Hành động này không thể hoàn tác.')) {
       return;
     }
 
@@ -142,7 +191,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
       const response = await profileAPI.deleteAccount(deletePassword);
       
       if (response.data.success) {
-        alert('Account deleted successfully');
+        alert('Xóa tài khoản thành công');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         if (onLogout) {
@@ -153,7 +202,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
       console.error('Delete account error:', err);
       setError(
         err.response?.data?.message || 
-        'An error occurred while deleting account'
+        'Đã xảy ra lỗi khi xóa tài khoản'
       );
     } finally {
       setLoading(false);
@@ -179,7 +228,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
   return (
     <div className="profile-container">
       <div className="profile-card">
-        <h2 className="profile-title">My Profile</h2>
+        <h2 className="profile-title">Hồ Sơ Của Tôi</h2>
 
         {error && <div className="alert alert-error">{error}</div>}
         {success && <div className="alert alert-success">{success}</div>}
@@ -195,23 +244,36 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
             )}
           </div>
           {isEditing && (
-            <div className="form-group">
-              <label>Avatar URL (optional)</label>
-              <input
-                type="url"
-                name="avatar"
-                value={formData.avatar}
-                onChange={handleChange}
-                placeholder="https://example.com/avatar.jpg"
-                disabled={loading}
-              />
-            </div>
+            <>
+              <div className="form-group">
+                <label>Tải lên ảnh đại diện (Ảnh - tối đa 5MB)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  disabled={uploadingAvatar}
+                  style={{ marginBottom: '10px' }}
+                />
+                {uploadingAvatar && <small>Đang tải lên...</small>}
+              </div>
+              <div className="form-group">
+                <label>Hoặc nhập URL ảnh đại diện</label>
+                <input
+                  type="url"
+                  name="avatar"
+                  value={formData.avatar}
+                  onChange={handleChange}
+                  placeholder="https://example.com/avatar.jpg"
+                  disabled={loading}
+                />
+              </div>
+            </>
           )}
         </div>
 
         <form onSubmit={handleSubmit} className="profile-form">
           <div className="form-group">
-            <label htmlFor="name">Full Name</label>
+            <label htmlFor="name">Họ và Tên</label>
             <input
               type="text"
               id="name"
@@ -237,9 +299,9 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
           </div>
 
           <div className="form-group">
-            <label>Role</label>
+            <label>Vai trò</label>
             <span className={`badge badge-${user?.role}`}>
-              {user?.role?.toUpperCase()}
+              {user?.role === 'admin' ? 'QUẢN TRỊ' : 'NGƯỜI DÙNG'}
             </span>
           </div>
 
@@ -252,46 +314,46 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
                   className="btn-link"
                   disabled={loading}
                 >
-                  {showChangePassword ? '✕ Cancel password change' : '🔒 Change Password'}
+                  {showChangePassword ? '✕ Hủy đổi mật khẩu' : '🔒 Đổi Mật Khẩu'}
                 </button>
 
                 {showChangePassword && (
                   <>
                     <div className="form-group">
-                      <label htmlFor="currentPassword">Current Password</label>
+                      <label htmlFor="currentPassword">Mật khẩu hiện tại</label>
                       <input
                         type="password"
                         id="currentPassword"
                         name="currentPassword"
                         value={formData.currentPassword}
                         onChange={handleChange}
-                        placeholder="Enter current password"
+                        placeholder="Nhập mật khẩu hiện tại"
                         disabled={loading}
                       />
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="newPassword">New Password</label>
+                      <label htmlFor="newPassword">Mật khẩu mới</label>
                       <input
                         type="password"
                         id="newPassword"
                         name="newPassword"
                         value={formData.newPassword}
                         onChange={handleChange}
-                        placeholder="Enter new password (min 6 characters)"
+                        placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
                         disabled={loading}
                       />
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="confirmNewPassword">Confirm New Password</label>
+                      <label htmlFor="confirmNewPassword">Xác nhận mật khẩu mới</label>
                       <input
                         type="password"
                         id="confirmNewPassword"
                         name="confirmNewPassword"
                         value={formData.confirmNewPassword}
                         onChange={handleChange}
-                        placeholder="Confirm new password"
+                        placeholder="Nhập lại mật khẩu mới"
                         disabled={loading}
                       />
                     </div>
@@ -305,7 +367,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
                   className="btn btn-primary"
                   disabled={loading}
                 >
-                  {loading ? 'Saving...' : 'Save Changes'}
+                  {loading ? 'Đang lưu...' : 'Lưu Thay Đổi'}
                 </button>
                 <button 
                   type="button" 
@@ -313,7 +375,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
                   className="btn btn-secondary"
                   disabled={loading}
                 >
-                  Cancel
+                  Hủy
                 </button>
               </div>
             </>
@@ -326,7 +388,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
                 onClick={() => setIsEditing(true)}
                 className="btn btn-primary"
               >
-                Edit Profile
+                Chỉnh Sửa Hồ Sơ
               </button>
             </div>
           )}
@@ -334,8 +396,8 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
 
         {/* Delete Account Section */}
         <div className="danger-zone">
-          <h3>Danger Zone</h3>
-          <p>Once you delete your account, there is no going back.</p>
+          <h3>Vùng Nguy Hiểm</h3>
+          <p>Khi bạn xóa tài khoản, dữ liệu sẽ không thể khôi phục.</p>
           
           {!showDeleteAccount ? (
             <button 
@@ -343,7 +405,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
               className="btn btn-danger"
               disabled={loading}
             >
-              Delete Account
+              Xóa Tài Khoản
             </button>
           ) : (
             <div className="delete-account-form">
@@ -351,7 +413,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
                 type="password"
                 value={deletePassword}
                 onChange={(e) => setDeletePassword(e.target.value)}
-                placeholder="Enter your password to confirm"
+                placeholder="Nhập mật khẩu để xác nhận"
                 disabled={loading}
               />
               <div className="delete-actions">
@@ -360,7 +422,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
                   className="btn btn-danger"
                   disabled={loading}
                 >
-                  {loading ? 'Deleting...' : 'Confirm Delete'}
+                  {loading ? 'Đang xóa...' : 'Xác Nhận Xóa'}
                 </button>
                 <button 
                   onClick={() => {
@@ -371,7 +433,7 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
                   className="btn btn-secondary"
                   disabled={loading}
                 >
-                  Cancel
+                  Hủy
                 </button>
               </div>
             </div>

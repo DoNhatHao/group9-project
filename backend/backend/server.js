@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 // Load environment variables
 dotenv.config();
@@ -11,6 +12,9 @@ const app = express();
 // Middleware
 app.use(cors()); // Enable CORS for frontend
 app.use(express.json());
+
+// Serve static files from uploads folder
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Connect to MongoDB
 const mongoURI = process.env.MONGODB_URI;

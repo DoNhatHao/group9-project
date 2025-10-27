@@ -17,4 +17,14 @@ router.post('/login', authController.login);
 // @access  Public
 router.post('/logout', authController.logout);
 
+// @route   POST /api/auth/forgot-password
+// @desc    Gửi yêu cầu reset password
+// @access  Public
+router.post('/forgot-password', authController.forgotPassword);
+
+// @route   PUT /api/auth/reset-password/:resetToken
+// @desc    Reset password với token
+// @access  Public
+router.put('/reset-password/:resetToken', authController.resetPassword);
+
 module.exports = router;

@@ -5,7 +5,7 @@ import './Dashboard.css';
 const Dashboard = ({ user, onLogout, onNavigateToProfile, onNavigateToAdmin }) => {
   const handleLogout = async () => {
     // Hiển thị thông báo xác nhận đăng xuất
-    const confirmLogout = window.confirm('Are you sure you want to logout?');
+    const confirmLogout = window.confirm('Bạn có chắc chắn muốn đăng xuất?');
     
     if (!confirmLogout) {
       return; // Hủy đăng xuất nếu user không confirm
@@ -19,7 +19,7 @@ const Dashboard = ({ user, onLogout, onNavigateToProfile, onNavigateToAdmin }) =
       localStorage.removeItem('user');
       
       // Hiển thị thông báo thành công
-      alert('Logout successful! See you again.');
+      alert('Đăng xuất thành công! Hẹn gặp lại.');
       
       // Callback để quay về trang login
       if (onLogout) {
@@ -31,7 +31,7 @@ const Dashboard = ({ user, onLogout, onNavigateToProfile, onNavigateToAdmin }) =
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       
-      alert('Logged out successfully.');
+      alert('Đăng xuất thành công!');
       
       if (onLogout) {
         onLogout();
@@ -42,9 +42,9 @@ const Dashboard = ({ user, onLogout, onNavigateToProfile, onNavigateToAdmin }) =
   return (
     <div className="dashboard-container">
       <nav className="dashboard-nav">
-        <h1 className="dashboard-logo">User Management</h1>
+        <h1 className="dashboard-logo">Quản Lý Người Dùng</h1>
         <button onClick={handleLogout} className="btn btn-logout">
-          Logout
+          Đăng Xuất
         </button>
       </nav>
 
@@ -60,8 +60,8 @@ const Dashboard = ({ user, onLogout, onNavigateToProfile, onNavigateToAdmin }) =
             )}
           </div>
           
-          <h2 className="welcome-title">Welcome, {user?.name || 'User'}!</h2>
-          <p className="welcome-subtitle">You have successfully logged in.</p>
+          <h2 className="welcome-title">Chào mừng, {user?.name || 'User'}!</h2>
+          <p className="welcome-subtitle">Bạn đã đăng nhập thành công.</p>
 
           <div className="user-info">
             <div className="info-item">
@@ -69,45 +69,38 @@ const Dashboard = ({ user, onLogout, onNavigateToProfile, onNavigateToAdmin }) =
               <span className="info-value">{user?.email}</span>
             </div>
             <div className="info-item">
-              <span className="info-label">Role:</span>
+              <span className="info-label">Vai trò:</span>
               <span className={`badge badge-${user?.role}`}>
-                {user?.role?.toUpperCase()}
+                {user?.role === 'admin' ? 'QUẢN TRỊ' : 'NGƯỜI DÙNG'}
               </span>
             </div>
             <div className="info-item">
-              <span className="info-label">Account Created:</span>
+              <span className="info-label">Ngày tạo tài khoản:</span>
               <span className="info-value">
-                {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
+                {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('vi-VN') : 'N/A'}
               </span>
             </div>
           </div>
         </div>
 
         <div className="features-section">
-          <h3>Available Features</h3>
+          <h3>Chức Năng Có Sẵn</h3>
           <div className="features-grid">
             <div className="feature-card" onClick={onNavigateToProfile} style={{cursor: 'pointer'}}>
               <div className="feature-icon">👤</div>
-              <h4>Profile Management</h4>
-              <p>Update your personal information and avatar</p>
-              <button className="btn-feature">Go to Profile</button>
+              <h4>Quản Lý Hồ Sơ</h4>
+              <p>Cập nhật thông tin cá nhân và ảnh đại diện</p>
+              <button className="btn-feature">Vào Trang Hồ Sơ</button>
             </div>
             
             {user?.role === 'admin' && (
               <div className="feature-card" onClick={onNavigateToAdmin} style={{cursor: 'pointer'}}>
                 <div className="feature-icon">👥</div>
-                <h4>User Management</h4>
-                <p>View and manage all users (Admin only)</p>
-                <button className="btn-feature">Go to Admin Panel</button>
+                <h4>Quản Lý Người Dùng</h4>
+                <p>Xem và quản lý tất cả người dùng (Chỉ Admin)</p>
+                <button className="btn-feature">Vào Trang Quản Trị</button>
               </div>
             )}
-            
-            <div className="feature-card">
-              <div className="feature-icon">🔒</div>
-              <h4>Security Settings</h4>
-              <p>Change password and manage security</p>
-              <span className="coming-soon">Coming Soon</span>
-            </div>
           </div>
         </div>
       </div>

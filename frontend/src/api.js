@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:30000", // Backend đang chạy ở port 30000
+  baseURL: "http://localhost:3000", // Backend đang chạy ở port 3000
 });
 
 // Thêm token vào header cho các request cần authentication
@@ -28,6 +28,13 @@ export const authAPI = {
   
   // Đăng xuất
   logout: () => api.post('/api/auth/logout'),
+  
+  // Forgot Password
+  forgotPassword: (email) => api.post('/api/auth/forgot-password', { email }),
+  
+  // Reset Password
+  resetPassword: (resetToken, newPassword) => 
+    api.put(`/api/auth/reset-password/${resetToken}`, { newPassword }),
 };
 
 // Profile API functions
@@ -37,6 +44,11 @@ export const profileAPI = {
   
   // Cập nhật profile
   updateProfile: (profileData) => api.put('/api/profile', profileData),
+  
+  // Upload avatar
+  uploadAvatar: (formData) => api.post('/api/profile/avatar', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   
   // Xóa tài khoản
   deleteAccount: (password) => api.delete('/api/profile', { data: { password } }),

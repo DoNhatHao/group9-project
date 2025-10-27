@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 // Define User Schema
 const userSchema = new mongoose.Schema({
@@ -61,6 +62,24 @@ userSchema.pre('save', async function(next) {
 // Method để so sánh password
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
+};
+
+// Method tạo reset password token
+userSchema.methods.getResetPasswordToken = function() {
+  // Tạo token ngẫu nhiên
+  const resetToken = crypto.randomBytes(20).toString('hex');
+  
+  // Hash token và lưu vào database
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+  
+  // Set expire time: 10 phút
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+  
+  // Trả về token gốc (không hash) để gửi email
+  return resetToken;
 };
 
 // Create and export User model

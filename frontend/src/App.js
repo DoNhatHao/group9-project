@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
 import AdminPanel from './components/AdminPanel';
@@ -10,6 +12,8 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showResetPassword, setShowResetPassword] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard', 'profile', 'admin'
 
   // Check if user is already logged in on component mount
@@ -34,23 +38,10 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    // Hiển thị thông báo xác nhận
-    const confirmLogout = window.confirm('Are you sure you want to logout?');
-    
-    if (!confirmLogout) {
-      return; // Hủy nếu user không confirm
-    }
-
-    // Xóa data và logout
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    
+    // Chỉ cập nhật state, không cần confirm/alert vì đã có trong Dashboard
     setIsAuthenticated(false);
     setCurrentUser(null);
     setCurrentView('dashboard');
-    
-    // Thông báo thành công
-    alert('Logout successful! See you again.');
   };
 
   const handleProfileUpdate = (updatedUser) => {
@@ -68,10 +59,10 @@ export default function App() {
         <div className="App">
           <nav className="app-nav">
             <button onClick={() => setCurrentView('dashboard')} className="nav-link">
-              ← Back to Dashboard
+              ← Quay Lại Trang Chủ
             </button>
             <button onClick={handleLogout} className="btn-logout-small">
-              Logout
+              Đăng Xuất
             </button>
           </nav>
           <Profile 
@@ -89,10 +80,10 @@ export default function App() {
         return (
           <div className="App">
             <div className="access-denied">
-              <h2>Access Denied</h2>
-              <p>You do not have permission to access this page.</p>
+              <h2>Truy Cập Bị Từ Chối</h2>
+              <p>Bạn không có quyền truy cập trang này.</p>
               <button onClick={() => setCurrentView('dashboard')} className="btn btn-primary">
-                Back to Dashboard
+                Quay Lại Trang Chủ
               </button>
             </div>
           </div>
@@ -119,7 +110,37 @@ export default function App() {
     );
   }
 
-  // If not authenticated, show Login or SignUp
+  // If not authenticated, show Login or SignUp or ForgotPassword or ResetPassword
+  if (showForgotPassword) {
+    return (
+      <div className="App">
+        <ForgotPassword 
+          onBack={() => {
+            setShowForgotPassword(false);
+            setShowSignUp(false);
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (showResetPassword) {
+    return (
+      <div className="App">
+        <ResetPassword 
+          onBack={() => {
+            setShowResetPassword(false);
+            setShowSignUp(false);
+          }}
+          onSuccess={() => {
+            setShowResetPassword(false);
+            setShowSignUp(false);
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="App">
       {showSignUp ? (
@@ -131,6 +152,8 @@ export default function App() {
         <Login 
           onToggleForm={toggleForm} 
           onLoginSuccess={handleLoginSuccess}
+          onForgotPassword={() => setShowForgotPassword(true)}
+          onResetPassword={() => setShowResetPassword(true)}
         />
       )}
     </div>

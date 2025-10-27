@@ -194,3 +194,50 @@ exports.deleteOwnAccount = async (req, res) => {
     });
   }
 };
+
+// @desc    Upload avatar
+// @route   POST /api/profile/avatar
+// @access  Private (cần token)
+exports.uploadAvatar = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'No file uploaded'
+      });
+    }
+
+    // Tạo full URL cho file đã upload (lưu local)
+    const avatarUrl = `http://localhost:${process.env.PORT || 3000}/uploads/${req.file.filename}`;
+
+    // Cập nhật avatar URL vào user
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { avatar: avatarUrl },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Avatar uploaded successfully',
+      data: {
+        avatar: avatarUrl,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          avatar: user.avatar
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Upload avatar error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error uploading avatar',
+      error: error.message
+    });
+  }
+};
