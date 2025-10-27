@@ -35,9 +35,9 @@ build/
 tmp/
 .tsbuildinfo
 
-# Uploads (nếu dùng multer)
-uploads/
-!uploads/.gitkeep
+# Uploads (comment out để commit ảnh mẫu cho demo)
+# uploads/
+# !uploads/.gitkeep
 
 # OS/Editor junk
 .DS_Store
