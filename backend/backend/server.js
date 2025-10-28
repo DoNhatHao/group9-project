@@ -4,6 +4,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,9 @@ app.options('*', cors()); // xử lý preflight OPTIONS
 
 // Common middlewares
 app.use(express.json());
+
+// Serve static files from uploads folder
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- MongoDB ---
 if (!process.env.MONGODB_URI) {
@@ -43,10 +47,15 @@ mongoose
     console.log('   3. Add IP Address → Add Current IP Address');
   });
 
-
 // --- Routes ---
-const userRoutes = require('./routes/user'); // đảm bảo đúng file router
-app.use('/users', userRoutes)
+const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profile');
+const userRoutes = require('./routes/user');
+
+app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/users', userRoutes);
+
 // --- Health / root ---
 app.get('/', (_req, res) => res.json({ message: 'Welcome to the API' }));
 
