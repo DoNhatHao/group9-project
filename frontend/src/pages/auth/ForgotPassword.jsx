@@ -34,9 +34,9 @@ const ForgotPassword = () => {
 
   const handleCopyToken = async () => {
     try {
-      await navigator.clipboard.writeText(`/reset-password/${resetInfo.resetToken}`);
+      await navigator.clipboard.writeText(resetInfo.resetToken);
       setCopied(true);
-      showSuccess('Đã sao chép link!');
+      showSuccess('Đã sao chép token!');
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       showError('Không thể sao chép. Vui lòng copy thủ công.');
@@ -94,60 +94,60 @@ const ForgotPassword = () => {
               <p>
                 Nếu không thấy email, hãy kiểm tra thư mục spam hoặc thư rác. Email có hiệu lực trong 10 phút.
               </p>
-              <div style={{ marginTop: 'var(--space-md)' }}>
-                <label className="auth-inline-label" htmlFor="reset-token" style={{ marginBottom: 'var(--space-xs)' }}>
-                  Link đặt lại mật khẩu
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <Input
-                    id="reset-token"
-                    type="text"
-                    value={`/reset-password/${resetInfo.resetToken}`}
-                    readOnly
-                    style={{ paddingRight: '3rem', fontFamily: 'monospace', fontSize: '0.85rem' }}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleCopyToken}
-                    className="copy-button"
-                    aria-label="Sao chép link"
-                    style={{
-                      position: 'absolute',
-                      right: '0.75rem',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: '0.25rem',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: copied ? 'hsl(var(--positive))' : 'hsl(var(--ink-muted))',
-                      transition: 'color 0.2s ease',
-                    }}
-                    title={copied ? 'Đã sao chép!' : 'Sao chép'}
-                  >
-                    {copied ? (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    ) : (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                      </svg>
-                    )}
-                  </button>
+                <div style={{ marginTop: 'var(--space-md)' }}>
+                  <label className="auth-inline-label" htmlFor="reset-token" style={{ marginBottom: 'var(--space-xs)' }}>
+                    Mã token đặt lại mật khẩu
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Input
+                      id="reset-token"
+                      type="text"
+                      value={resetInfo.resetToken}
+                      readOnly
+                      style={{ paddingRight: '3rem', fontFamily: 'monospace', fontSize: '0.85rem' }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleCopyToken}
+                      className="copy-button"
+                      aria-label="Sao chép token"
+                      style={{
+                        position: 'absolute',
+                        right: '0.75rem',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '0.25rem',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: copied ? 'hsl(var(--positive))' : 'hsl(var(--ink-muted))',
+                        transition: 'color 0.2s ease',
+                      }}
+                      title={copied ? 'Đã sao chép!!' : 'Sao chép'}
+                    >
+                      {copied ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="auth-card__footer">
-              <Link to="/reset-password" className="auth-link">
-                Đặt lại mật khẩu →
-              </Link>
-            </div>
+              <div className="auth-card__footer">
+                <Link to={`/reset-password/${resetInfo.resetToken}`} className="auth-link">
+                  Đặt lại mật khẩu →
+                </Link>
+              </div>
           </>
         )}
       </Card>
