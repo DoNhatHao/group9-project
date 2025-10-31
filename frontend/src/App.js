@@ -1,161 +1,105 @@
-import React, { useState, useEffect } from 'react';
-import SignUp from './components/SignUp';
-import Login from './components/Login';
-import ForgotPassword from './components/ForgotPassword';
-import ResetPassword from './components/ResetPassword';
-import Dashboard from './components/Dashboard';
-import Profile from './components/Profile';
-import AdminPanel from './components/AdminPanel';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import AppLayout from './layout/AppLayout';
+
+import LandingPage from './pages/LandingPage';
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import Dashboard from './pages/Dashboard';
+import Profile from './pages/Profile';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import NotFound from './pages/NotFound';
+
 import './App.css';
 
-export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const [showResetPassword, setShowResetPassword] = useState(false);
-  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard', 'profile', 'admin'
+const AuthRoute = ({ children }) => {
+  const { user } = useAuth();
+  return user ? <Navigate to="/dashboard" replace /> : children;
+};
 
-  // Check if user is already logged in on component mount
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
-    
-    if (token && user) {
-      setIsAuthenticated(true);
-      setCurrentUser(JSON.parse(user));
-    }
-  }, []);
-
-  const handleSignUpSuccess = (user) => {
-    setIsAuthenticated(true);
-    setCurrentUser(user);
-  };
-
-  const handleLoginSuccess = (user) => {
-    setIsAuthenticated(true);
-    setCurrentUser(user);
-  };
-
-  const handleLogout = () => {
-    // Chỉ cập nhật state, không cần confirm/alert vì đã có trong Dashboard
-    setIsAuthenticated(false);
-    setCurrentUser(null);
-    setCurrentView('dashboard');
-  };
-
-  const handleProfileUpdate = (updatedUser) => {
-    setCurrentUser(updatedUser);
-  };
-
-  const toggleForm = () => {
-    setShowSignUp(!showSignUp);
-  };
-
-  // If authenticated, show Dashboard or Profile
-  if (isAuthenticated && currentUser) {
-    if (currentView === 'profile') {
-      return (
-        <div className="App">
-          <nav className="app-nav">
-            <button onClick={() => setCurrentView('dashboard')} className="nav-link">
-              ← Quay Lại Trang Chủ
-            </button>
-            <button onClick={handleLogout} className="btn-logout-small">
-              Đăng Xuất
-            </button>
-          </nav>
-          <Profile 
-            user={currentUser} 
-            onProfileUpdate={handleProfileUpdate}
-            onLogout={handleLogout}
-          />
-        </div>
-      );
-    }
-    
-    if (currentView === 'admin') {
-      // Chỉ admin mới được vào
-      if (currentUser.role !== 'admin') {
-        return (
-          <div className="App">
-            <div className="access-denied">
-              <h2>Truy Cập Bị Từ Chối</h2>
-              <p>Bạn không có quyền truy cập trang này.</p>
-              <button onClick={() => setCurrentView('dashboard')} className="btn btn-primary">
-                Quay Lại Trang Chủ
-              </button>
-            </div>
-          </div>
-        );
-      }
-      
-      return (
-        <div className="App">
-          <AdminPanel 
-            currentUser={currentUser}
-            onBack={() => setCurrentView('dashboard')}
-          />
-        </div>
-      );
-    }
-    
-    return (
-      <Dashboard 
-        user={currentUser} 
-        onLogout={handleLogout}
-        onNavigateToProfile={() => setCurrentView('profile')}
-        onNavigateToAdmin={() => setCurrentView('admin')}
-      />
-    );
-  }
-
-  // If not authenticated, show Login or SignUp or ForgotPassword or ResetPassword
-  if (showForgotPassword) {
-    return (
-      <div className="App">
-        <ForgotPassword 
-          onBack={() => {
-            setShowForgotPassword(false);
-            setShowSignUp(false);
-          }}
-        />
-      </div>
-    );
-  }
-
-  if (showResetPassword) {
-    return (
-      <div className="App">
-        <ResetPassword 
-          onBack={() => {
-            setShowResetPassword(false);
-            setShowSignUp(false);
-          }}
-          onSuccess={() => {
-            setShowResetPassword(false);
-            setShowSignUp(false);
-          }}
-        />
-      </div>
-    );
-  }
+function AppContent() {
+  const { user } = useAuth();
 
   return (
     <div className="App">
-      {showSignUp ? (
-        <SignUp 
-          onToggleForm={toggleForm} 
-          onSignUpSuccess={handleSignUpSuccess}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      <Routes>
+        <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <LandingPage />} />
+        <Route path="/landing-preview" element={<LandingPage />} />
+
+        <Route
+          path="/login"
+          element={
+            <AuthRoute>
+              <Login />
+            </AuthRoute>
+          }
         />
-      ) : (
-        <Login 
-          onToggleForm={toggleForm} 
-          onLoginSuccess={handleLoginSuccess}
-          onForgotPassword={() => setShowForgotPassword(true)}
-          onResetPassword={() => setShowResetPassword(true)}
+        <Route
+          path="/signup"
+          element={
+            <AuthRoute>
+              <Signup />
+            </AuthRoute>
+          }
         />
-      )}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Profile />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute requireAdmin>
+              <AppLayout>
+                <AdminDashboard />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 }
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <Toaster position="top-right" />
+        <AppContent />
+      </AuthProvider>
+    </Router>
+  );
+}
+
+export default App;
+
