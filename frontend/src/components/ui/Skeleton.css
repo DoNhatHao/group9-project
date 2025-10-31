@@ -1,0 +1,29 @@
+.ui-skeleton {
+  position: relative;
+  display: block;
+  background: linear-gradient(90deg,
+    hsl(var(--subtle)),
+    hsl(var(--muted)),
+    hsl(var(--subtle))
+  );
+  background-size: 200% 100%;
+  animation: ui-skeleton-shimmer 1.2s var(--easing-standard) infinite;
+}
+
+@keyframes ui-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-skeleton {
+    animation: none;
+  }
+}
+
+
+
