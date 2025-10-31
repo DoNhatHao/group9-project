@@ -1,0 +1,56 @@
+.ui-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.ui-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: hsl(var(--ink));
+  line-height: var(--leading-snug);
+}
+
+.ui-field__required-indicator {
+  color: hsl(var(--danger));
+  font-size: var(--text-sm);
+  position: relative;
+  top: -1px;
+}
+
+.ui-field__description {
+  font-size: var(--text-xs);
+  color: hsl(var(--ink-muted));
+  margin: 0;
+  line-height: var(--leading-snug);
+}
+
+.ui-field__message {
+  font-size: var(--text-xs);
+  margin: 0;
+  color: hsl(var(--ink-muted));
+  line-height: var(--leading-snug);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ui-field__message--error {
+  color: hsl(var(--danger));
+  font-weight: 500;
+}
+
+.ui-field__message--error::before {
+  content: '⚠';
+  font-size: var(--text-sm);
+}
+
+.ui-field--error .ui-field__label {
+  color: hsl(var(--ink));
+}
+
+
+
