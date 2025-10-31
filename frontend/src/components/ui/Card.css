@@ -1,0 +1,36 @@
+.ui-card {
+  background: hsl(var(--surface));
+  color: hsl(var(--ink));
+  border: 1px solid hsl(var(--border-subtle));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  transition:
+    transform var(--duration-fast) var(--ease-spring),
+    box-shadow var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.ui-card--elevated {
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-card:hover {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+  border-color: hsl(var(--border-strong));
+}
+
+.ui-card--elevated:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-card:hover,
+  .ui-card--elevated:hover {
+    transform: none;
+  }
+}
+
+
+
