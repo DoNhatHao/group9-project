@@ -1,298 +1,165 @@
-# 🚀 GROUP 9 PROJECT - USER MANAGEMENT WITH AUTHENTICATION
+# 🚀 GROUP 9 PROJECT - USER MANAGEMENT SYSTEM
 
-## 📋 Mô tả dự án
-Ứng dụng web quản lý người dùng với các tính năng authentication và user management đầy đủ.
-
-## 🛠 Công nghệ sử dụng
-- **Backend:** Node.js, Express.js, MongoDB, JWT, bcrypt
-- **Frontend:** React.js, Axios
-- **Database:** MongoDB Atlas
-
-## 📁 Cấu trúc dự án
-```
-group9-project/
-├── backend/
-│   └── backend/
-│       ├── controllers/
-│       │   ├── authController.js    # Authentication logic
-│       │   └── userController.js    # User CRUD logic
-│       ├── models/
-│       │   └── User.js              # User schema
-│       ├── routes/
-│       │   ├── auth.js              # Auth routes
-│       │   └── user.js              # User routes
-│       ├── .env                     # Environment variables
-│       ├── server.js                # Server entry point
-│       └── package.json
-└── frontend/
-    ├── src/
-    │   ├── components/
-    │   │   ├── SignUp.jsx           # Sign up form
-    │   │   ├── Login.jsx            # Login form
-    │   │   ├── Dashboard.jsx        # User dashboard
-    │   │   ├── Auth.css             # Auth styling
-    │   │   └── Dashboard.css        # Dashboard styling
-    │   ├── api.js                   # API service
-    │   ├── App.js                   # Main app component
-    │   └── index.js
-    └── package.json
-```
+Ứng dụng web quản lý người dùng full-stack với authentication, profile management và admin dashboard.
 
 ---
 
-## 🚀 HƯỚNG DẪN CÀI ĐẶT VÀ CHẠY
+## 👥 THÀNH VIÊN NHÓM
 
-### Bước 1: Clone repository
-```bash
-git clone https://github.com/DoNhatHao/group9-project.git
-cd group9-project
-```
+| Họ Tên | MSSV | Vai Trò | Công Việc |
+|--------|------|---------|-----------|
+| **Đỗ Nhật Hào** | 224168 | Backend Developer | RESTful API, JWT Authentication, MongoDB, Deploy backend lên Render.com |
+| **Nguyễn Hoàng Anh Kiệt** | 226117 | Frontend Developer | React UI/UX, Components, Routing, API Integration, Responsive Design |
+| **Trần Chí Linh** | 221880 | Database Manager | MongoDB Schema, Database Connection, Testing, Documentation |
 
-### Bước 2: Cài đặt Backend
+---
+
+## 🛠️ CÔNG NGHỆ
+
+**Backend:** Node.js, Express.js, MongoDB, JWT, bcrypt, Multer  
+**Frontend:** React.js, React Router, Axios, React Hot Toast  
+**Database:** MongoDB Atlas  
+**Deployment:** Render.com
+
+---
+
+## 🌐 DEPLOYMENT
+
+**Backend API:** https://group9-project.onrender.com  
+**Status:** ✅ Live  
+**Version:** 2.0.0
+
+---
+
+## ✨ TÍNH NĂNG
+
+### 🔐 Authentication
+- Đăng ký, Đăng nhập, Đăng xuất
+- JWT Token Authentication
+- Quên mật khẩu & Reset password
+- Protected Routes
+
+### 👤 Profile Management
+- Xem và chỉnh sửa thông tin cá nhân
+- Đổi mật khẩu
+- Upload avatar
+- Xóa tài khoản
+
+### 👑 Admin Dashboard
+- Quản lý danh sách users
+- Thêm, sửa, xóa users
+- Thống kê người dùng
+- Role-Based Access Control (RBAC)
+
+---
+
+## 🚀 HƯỚNG DẪN CÀI ĐẶT
+
+### Backend
 ```bash
-cd backend/backend
+cd backend
 npm install
-```
 
-### Bước 3: Cấu hình môi trường (.env)
-Tạo file `.env` trong thư mục `backend/backend/`:
-```env
-PORT=3001
+# Tạo file .env
+PORT=3000
 MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_super_secret_jwt_key
-```
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRE=30d
 
-### Bước 4: Khởi động Backend
-```bash
 npm start
 ```
-Backend sẽ chạy tại: `http://localhost:3001`
 
-### Bước 5: Cài đặt Frontend (Terminal mới)
+### Frontend
 ```bash
 cd frontend
 npm install
-```
 
-### Bước 6: Khởi động Frontend
-```bash
+# Tạo file .env
+REACT_APP_API_URL=https://group9-project.onrender.com
+
 npm start
 ```
-Frontend sẽ chạy tại: `http://localhost:3000`
 
 ---
 
-## 📌 HOẠT ĐỘNG 1: AUTHENTICATION CƠ BẢN
+## 🔌 API ENDPOINTS
 
-### ✅ Các chức năng đã hoàn thành:
+### Authentication (`/api/auth`)
+- `POST /signup` - Đăng ký
+- `POST /login` - Đăng nhập
+- `POST /logout` - Đăng xuất
+- `GET /me` - Lấy thông tin user
+- `POST /forgot-password` - Quên mật khẩu
+- `POST /reset-password/:token` - Reset mật khẩu
 
-#### 🔐 Backend API (Sinh viên 1)
-1. **POST /api/auth/signup** - Đăng ký tài khoản
-   - Kiểm tra email trùng
-   - Mã hóa mật khẩu bằng bcrypt
-   - Trả về JWT token
+### Profile (`/api/profile`)
+- `GET /` - Lấy profile
+- `PUT /` - Cập nhật profile
+- `PUT /password` - Đổi mật khẩu
+- `POST /avatar` - Upload avatar
+- `DELETE /` - Xóa tài khoản
 
-2. **POST /api/auth/login** - Đăng nhập
-   - Xác thực email/password
-   - Trả về JWT token
+### Admin (`/api/admin`) - Yêu cầu Admin Role
+- `GET /users` - Danh sách users
+- `POST /users` - Tạo user
+- `GET /users/:id` - Chi tiết user
+- `PUT /users/:id` - Cập nhật user
+- `DELETE /users/:id` - Xóa user
+- `GET /stats` - Thống kê
 
-3. **POST /api/auth/logout** - Đăng xuất
-   - Xóa token phía client
+---
 
-#### 🎨 Frontend UI (Sinh viên 2)
-1. **SignUp Component** - Form đăng ký
-   - Input: Name, Email, Password, Confirm Password
-   - Validation
-   - Error/Success messages
+## 📂 CẤU TRÚC DỰ ÁN
 
-2. **Login Component** - Form đăng nhập
-   - Input: Email, Password
-   - Validation
-   - Error/Success messages
-
-3. **Dashboard Component** - Trang chính sau đăng nhập
-   - Hiển thị thông tin user
-   - Avatar placeholder
-   - Nút logout
-
-#### 🗄️ Database Schema
-```javascript
-User Schema:
-- name: String (required)
-- email: String (required, unique)
-- password: String (required, hashed)
-- role: String (user/admin)
-- avatar: String
-- resetPasswordToken: String
-- resetPasswordExpire: Date
-- timestamps: createdAt, updatedAt
+```
+group9-project/
+├── backend/
+│   ├── controllers/      # Business logic
+│   ├── models/           # Database schemas
+│   ├── routes/           # API routes
+│   ├── middlewares/      # Auth, Upload
+│   └── server.js
+│
+└── frontend/
+    └── src/
+        ├── components/   # UI Components
+        ├── pages/        # Pages
+        ├── services/     # API calls
+        ├── context/      # Auth Context
+        └── App.js
 ```
 
 ---
 
-## 🧪 TESTING
+## 🧪 TEST API
 
-### Test Backend với Postman
-Xem file: `TESTING_ACTIVITY1.md` để biết chi tiết
-
-### Test Frontend
-1. Mở browser tại `http://localhost:3000`
-2. Test form Sign Up
-3. Test form Login
-4. Kiểm tra Dashboard
-5. Test Logout
-
----
-
-## 📸 SCREENSHOTS YÊU CẦU
-
-### Backend (Postman):
-- ✅ POST /api/auth/signup (201)
-- ❌ POST /api/auth/signup với email trùng (400)
-- ✅ POST /api/auth/login (200)
-- ❌ POST /api/auth/login với password sai (401)
-- ✅ POST /api/auth/logout (200)
-
-### Frontend (Browser):
-- ✅ Sign Up form
-- ✅ Success message sau sign up
-- ✅ Login form
-- ✅ Dashboard sau login
-- ✅ JWT token trong localStorage
-
----
-
-## 🌿 GIT WORKFLOW
-
-### Các nhánh:
-- `main` - Nhánh chính, stable code
-- `backend` - Development backend
-- `backend-auth` - Authentication API
-- `frontend` - Development frontend
-- `frontend-auth` - Authentication UI
-
-### Quy trình làm việc:
-1. Tạo nhánh feature từ `main`
-2. Develop và test
-3. Commit với message rõ ràng
-4. Push lên GitHub
-5. Tạo Pull Request
-6. Review code
-7. Merge vào `main`
-
-### Commit messages:
 ```bash
-git commit -m "Backend: Add authentication with JWT and bcrypt"
-git commit -m "Frontend: Add Login and SignUp components"
-git commit -m "Database: Update User schema with role and password"
+# Test Backend
+curl https://group9-project.onrender.com/
+
+# Test Signup
+curl -X POST https://group9-project.onrender.com/api/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"test@test.com","password":"123456"}'
 ```
 
 ---
 
-## 👥 PHÂN CÔNG NHÓM
+## 📝 LƯU Ý
 
-### Sinh viên 1 - Backend Developer
-- [x] API Authentication (signup, login, logout)
-- [ ] API Profile Management (GET, PUT)
-- [ ] API User Management (Admin)
-- [ ] API Reset Password
-- [ ] API Upload Avatar
-
-### Sinh viên 2 - Frontend Developer
-- [x] UI Authentication (SignUp, Login)
-- [x] Dashboard component
-- [ ] Profile page
-- [ ] Admin panel
-- [ ] Forgot Password flow
-
-### Sinh viên 3 - Database & Git Manager
-- [x] User schema setup
-- [ ] Test data seeding
-- [ ] Pull Request review
-- [ ] Git merge management
-- [ ] Testing documentation
+- File `.env` không được commit (đã có trong `.gitignore`)
+- Restart React server sau khi thay đổi `.env`
+- Render.com có cold start (~30s cho request đầu tiên)
+- Password được hash với bcrypt (salt rounds: 10)
+- JWT token hết hạn sau 30 ngày
 
 ---
 
-## 🔜 NEXT ACTIVITIES
+## 📞 LIÊN HỆ
 
-### Hoạt động 2: Profile Management
-- API: GET /api/profile, PUT /api/profile
-- UI: Profile page, Edit form
-
-### Hoạt động 3: User Management (Admin)
-- API: GET /api/users, DELETE /api/users/:id
-- UI: Admin dashboard, User list
-- Middleware: RBAC (Role-Based Access Control)
-
-### Hoạt động 4: Advanced Features
-- Forgot Password
-- Reset Password
-- Avatar Upload (Cloudinary)
-
-### Hoạt động 5: Final Integration
-- Merge all features
-- Complete testing
-- Documentation
-- Video demo
+**Repository:** https://github.com/DoNhatHao/group9-project  
+**Team:** Đỗ Nhật Hào, Nguyễn Hoàng Anh Kiệt, Trần Chí Linh
 
 ---
 
-## 📝 NOTES
-
-### Dependencies Backend:
-```json
-{
-  "express": "^4.18.2",
-  "mongoose": "^8.19.2",
-  "bcryptjs": "^2.4.3",
-  "jsonwebtoken": "^9.0.2",
-  "dotenv": "^16.3.1",
-  "cors": "^2.8.5",
-  "nodemon": "^3.0.1"
-}
-```
-
-### Dependencies Frontend:
-```json
-{
-  "react": "^19.2.0",
-  "react-dom": "^19.2.0",
-  "axios": "^1.12.2"
-}
-```
-
----
-
-## 🐛 TROUBLESHOOTING
-
-### Lỗi kết nối MongoDB
-- Kiểm tra MONGODB_URI trong file .env
-- Kiểm tra IP whitelist trên MongoDB Atlas
-- Kiểm tra username/password
-
-### Lỗi CORS
-- Đảm bảo cors được enable trong server.js
-- Kiểm tra baseURL trong api.js
-
-### Lỗi JWT
-- Kiểm tra JWT_SECRET trong .env
-- Kiểm tra token được lưu trong localStorage
-
----
-
-## 📞 CONTACT
-
-- **Repository:** https://github.com/DoNhatHao/group9-project
-- **Issues:** https://github.com/DoNhatHao/group9-project/issues
-
----
-
-## 📄 LICENSE
-
-This project is for educational purposes - Group 9 University Project.
-
----
-
-**Last Updated:** October 27, 2025
-**Version:** 1.0 - Activity 1 Completed ✅
+**Version:** 2.0.0 | **Updated:** November 1, 2025 | **Status:** ✅ Production Ready

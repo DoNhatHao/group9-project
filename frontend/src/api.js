@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3000";
+
 export const api = axios.create({
-  baseURL: "http://localhost:3000", // Backend đang chạy ở port 3000
+  baseURL: API_URL, // Backend API URL from environment variable
 });
 
 // Thêm token vào header cho các request cần authentication
