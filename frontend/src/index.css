@@ -1,13 +1,240 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Menlo', monospace;
+
+  /* Sunset Horizon warm palette */
+  --background: 30 40% 98%;
+  --surface: 0 0% 100%;
+  --surface-muted: 30 30% 96%;
+  --surface-strong: 30 20% 92%;
+
+  --ink: 24 35% 14%;
+  --ink-muted: 24 15% 40%;
+  --ink-subtle: 24 10% 56%;
+
+  --primary: 12 88% 62%;
+  --primary-soft: 12 100% 95%;
+  --primary-ink: 0 0% 100%;
+  --primary-hover: 12 88% 55%;
+
+  --accent: 9 58% 52%;
+  --accent-soft: 9 60% 94%;
+
+  --positive: 142 72% 42%;
+  --warning: 38 96% 52%;
+  --danger: 5 75% 54%;
+  --info: 180 68% 48%;
+  --neutral: 24 10% 50%;
+  --danger-subtle: 5 75% 54% / 0.08;
+
+  --gray-50: 30 28% 98%;
+  --gray-100: 30 25% 96%;
+  --gray-800: 24 20% 25%;
+  --gray-900: 24 28% 16%;
+
+  /* Warm borders */
+  --border: 30 22% 85%;
+  --border-light: 30 28% 92%;
+  --border-strong: 24 18% 72%;
+  --border-subtle: 30 25% 90%;
+
+  /* Typography scale system */
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.875rem;     /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+  --text-4xl: 2.25rem;     /* 36px */
+
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* Enhanced shadows with better depth */
+  --shadow-xs: 0 2px 4px rgba(24, 18, 12, 0.06);
+  --shadow-sm: 0 8px 18px rgba(24, 18, 12, 0.1);
+  --shadow-md: 0 16px 32px rgba(24, 18, 12, 0.14);
+  --shadow-lg: 0 24px 48px rgba(24, 18, 12, 0.18);
+
+  --space-xs: 0.4rem;
+  --space-sm: 0.75rem;
+  --space-md: 1.1rem;
+  --space-lg: 1.6rem;
+  --space-xl: 2.2rem;
+  --space-xxl: 3.2rem;
+
+  --content-width: 1180px;
+  --content-gutter: clamp(1.25rem, 3.5vw, 3rem);
+
+  /* Improved animation timing */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-normal: 220ms;
+  --duration-slow: 300ms;
+  --easing-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --easing-emphasized: cubic-bezier(0.2, 0.8, 0.4, 1);
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-decel: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --transitions-base: all var(--duration-normal) var(--easing-standard);
+  --transitions-quick: all var(--duration-fast) var(--easing-standard);
+
+  /* Legacy aliases kept for compatibility across existing stylesheets */
+  --foreground: var(--ink);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--ink-subtle);
+  --subtle: var(--surface-muted);
+  --subtle-foreground: var(--ink-subtle);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --border-hairline: var(--border-light);
+  --input: var(--surface);
+  --ring: var(--primary);
+  --focus-ring: 12 88% 62% / 0.20;
+  --primary-foreground: var(--primary-ink);
+  --accent-foreground: var(--primary-ink);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--primary-ink);
+  --success: var(--positive);
+  --success-foreground: var(--primary-ink);
+  --warning-foreground: 30 75% 16%;
+  --info: 215 90% 65%;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: hsl(var(--border));
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  background: hsl(var(--background));
+  color: hsl(var(--ink));
+  line-height: var(--leading-normal);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: var(--font-mono);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visible improvements */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px hsl(var(--focus-ring));
+  border-color: hsl(var(--primary));
+  border-radius: calc(var(--radius-sm) / 1.5);
+}
+
+/* Better selection colors */
+::selection {
+  background: hsl(var(--primary) / 0.2);
+  color: hsl(var(--ink));
+}
+
+/* Improved scrollbar styling */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--surface-muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border-strong));
+  border-radius: var(--radius-pill);
+  border: 2px solid hsl(var(--surface-muted));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--ink-subtle));
+}
+
+.surface-card {
+  background: hsl(var(--surface));
+  color: hsl(var(--ink));
+  border-radius: var(--radius-lg);
+  border: 1px solid hsl(var(--border-subtle));
+  box-shadow: var(--shadow-sm);
+}
+
+.surface-card[data-elevated='true'] {
+  box-shadow: var(--shadow-md);
+}
+
+.container {
+  width: min(100%, var(--content-width));
+  margin-inline: auto;
+  padding-inline: var(--content-gutter);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px hsl(var(--focus-ring));
+  border-color: hsl(var(--primary));
+  border-radius: calc(var(--radius-sm) / 1.5);
 }
