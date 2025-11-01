@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Button, Input, Card, Avatar, PasswordStrength, Modal, Field, PasswordInput, PageHeader } from '../components/ui';
 import profileService from '../services/profileService';
 import { showError, showSuccess } from '../utils/toast';
+import { API_URL } from '../api';
 import './Profile.css';
 
 const Profile = () => {
@@ -156,7 +157,7 @@ const Profile = () => {
 
       <Card className="profile__section profile__identity" elevated>
         <div className="profile__identity-avatar">
-          <Avatar src={user?.avatar ? `http://localhost:3000${user.avatar}` : null} name={user?.name} size="xl" />
+          <Avatar src={user?.avatar ? `${API_URL}${user.avatar}` : null} name={user?.name} size="xl" />
           <div className="profile__identity-meta">
             <h2>{user?.name}</h2>
             <p>{user?.email}</p>

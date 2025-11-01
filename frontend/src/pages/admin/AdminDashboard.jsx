@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import adminService from '../../services/adminService';
 import { Button, Badge, Card, StatCard, Avatar, Modal, Input, PageHeader, Skeleton, Field, PasswordInput } from '../../components/ui';
 import { showError, showSuccess } from '../../utils/toast';
+import { API_URL } from '../../api';
 import './AdminDashboard.css';
 
 const AdminIcon = ({ name }) => {
@@ -273,7 +274,7 @@ const AdminDashboard = () => {
                     <td data-label="Họ tên">
                       <div className="admin__user">
                         <Avatar
-                          src={member.avatar ? `http://localhost:3000${member.avatar}` : null}
+                          src={member.avatar ? `${API_URL}${member.avatar}` : null}
                           name={member.name}
                           size="sm"
                         />

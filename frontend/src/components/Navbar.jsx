@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../api';
 import './Navbar.css';
 
 const Navbar = ({ onMenuClick, pageTitle }) => {
@@ -131,7 +132,7 @@ const Navbar = ({ onMenuClick, pageTitle }) => {
             aria-haspopup="true"
           >
             {user?.avatar ? (
-              <img src={`http://localhost:3000${user.avatar}`} alt={user.name} />
+              <img src={`${API_URL}${user.avatar}`} alt={user.name} />
             ) : (
               <span className="user-chip-initials" aria-hidden>
                 {initials}

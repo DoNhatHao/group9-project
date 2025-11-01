@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Card, Avatar, StatCard, PageHeader, Skeleton, Button } from '../components/ui';
+import { API_URL } from '../api';
 import './Dashboard.css';
 
 const StatIcon = ({ name }) => {
@@ -180,7 +181,7 @@ const Dashboard = () => {
               {user?.name || 'Thành viên'} - {formatDate(currentTime)} - {formatTime(currentTime)}
             </h2>
           </div>
-          <Avatar src={user?.avatar ? `http://localhost:3000${user.avatar}` : null} name={user?.name} size="lg" />
+          <Avatar src={user?.avatar ? `${API_URL}${user.avatar}` : null} name={user?.name} size="lg" />
         </div>
       </PageHeader>
 
@@ -205,7 +206,7 @@ const Dashboard = () => {
             </Button>
           </div>
           <div className="dashboard__account-body">
-            <Avatar src={user?.avatar ? `http://localhost:3000${user.avatar}` : null} name={user?.name} size="xl" />
+            <Avatar src={user?.avatar ? `${API_URL}${user.avatar}` : null} name={user?.name} size="xl" />
             <dl>
               <div>
                 <dt>Họ tên</dt>

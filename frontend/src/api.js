@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3000";
+// Export API_URL để dùng cho avatar URLs
+export const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
 export const api = axios.create({
   baseURL: API_URL, // Backend API URL from environment variable
